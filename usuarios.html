@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockMaster — Usuários</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="conteudo">
+    <div class="pagina">
+      <h1>Usuários</h1>
+
+      <div id="mensagem"></div>
+
+      <div class="cartao">
+        <h2>Novo Usuário</h2>
+        <form id="form-usuario">
+          <div class="linha">
+            <div class="campo">
+              <label for="nome">Nome</label>
+              <input type="text" id="nome" required>
+            </div>
+            <div class="campo">
+              <label for="usuario">Usuário</label>
+              <input type="text" id="usuario" required>
+            </div>
+          </div>
+          <div class="linha">
+            <div class="campo">
+              <label for="senha">Senha</label>
+              <input type="password" id="senha" required>
+            </div>
+            <div class="campo">
+              <label for="perfil">Perfil</label>
+              <select id="perfil">
+                <option>Administrador</option>
+                <option>Operador</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primario">Salvar</button>
+        </form>
+      </div>
+
+      <div class="cartao">
+        <h2>Usuários Cadastrados</h2>
+        <table>
+          <thead>
+            <tr><th>Nome</th><th>Usuário</th><th>Perfil</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tabela-usuarios"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    montarLayout();
+
+    function listar() {
+      var dados = DB.ler();
+      var html = '';
+      for (var i = 0; i < dados.usuarios.length; i++) {
+        var u = dados.usuarios[i];
+        html += '<tr><td>' + u.nome + '</td><td>' + u.usuario + '</td><td>' + u.perfil + '</td>' +
+          '<td><button class="btn btn-perigo btn-pequeno" onclick="excluir(' + u.id + ')">Excluir</button></td></tr>';
+      }
+      document.getElementById('tabela-usuarios').innerHTML = html;
+    }
+
+    function excluir(id) {
+      var dados = DB.ler();
+      if (dados.usuarios.length === 1) {
+        mensagem('É necessário manter pelo menos um usuário.', 'erro');
+        return;
+      }
+      dados.usuarios = dados.usuarios.filter(function (u) { return u.id !== id; });
+      DB.salvar(dados);
+      mensagem('Usuário excluído.', 'ok');
+      listar();
+    }
+
+    document.getElementById('form-usuario').onsubmit = function (e) {
+      e.preventDefault();
+      var dados = DB.ler();
+      var login = document.getElementById('usuario').value.trim();
+
+      for (var i = 0; i < dados.usuarios.length; i++) {
+        if (dados.usuarios[i].usuario === login) {
+          mensagem('Já existe um usuário com esse login.', 'erro');
+          return;
+        }
+      }
+
+      dados.usuarios.push({
+        id: DB.proximoId(dados.usuarios),
+        nome: document.getElementById('nome').value.trim(),
+        usuario: login,
+        senha: document.getElementById('senha').value,
+        perfil: document.getElementById('perfil').value
+      });
+
+      DB.salvar(dados);
+      this.reset();
+      mensagem('Usuário cadastrado com sucesso!', 'ok');
+      listar();
+    };
+
+    listar();
+  </script>
+</body>
+</html>
