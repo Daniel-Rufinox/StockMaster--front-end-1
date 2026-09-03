@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockMaster — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="conteudo">
+    <div class="pagina">
+      <h1>Dashboard</h1>
+
+      <div class="grade">
+        <div class="cartao indicador">
+          <div class="rotulo">Total de Produtos</div>
+          <div class="valor" id="total-produtos">0</div>
+        </div>
+        <div class="cartao indicador">
+          <div class="rotulo">Itens em Estoque</div>
+          <div class="valor" id="total-itens">0</div>
+        </div>
+        <div class="cartao">
+          <div class="acoes">
+            <a class="btn btn-primario" href="produto-novo.html">+ Cadastrar Produto</a>
+            <a class="btn btn-secundario" href="produtos.html">Ver Estoque</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cartao">
+        <h2>Últimas Movimentações</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>Tipo</th>
+              <th>Quantidade</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-movimentacoes"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    montarLayout();
+
+    var dados = DB.ler();
+    var itens = 0;
+    for (var i = 0; i < dados.produtos.length; i++) itens += Number(dados.produtos[i].quantidade);
+
+    document.getElementById('total-produtos').textContent = dados.produtos.length;
+    document.getElementById('total-itens').textContent = itens;
+
+    var lista = dados.movimentacoes.slice().reverse().slice(0, 8);
+    var html = '';
+    for (var j = 0; j < lista.length; j++) {
+      var m = lista[j];
+      var p = produtoPorId(dados, m.produtoId);
+      if (!p) continue;
+      html += '<tr>' +
+        '<td>' + p.nome + '</td>' +
+        '<td>' + p.categoria + '</td>' +
+        '<td><span class="etiqueta etiqueta-' + m.tipo + '">' + (m.tipo === 'entrada' ? 'Entrada' : 'Saída') + '</span></td>' +
+        '<td>' + m.quantidade + '</td>' +
+        '<td>' + dataBR(m.data) + '</td>' +
+        '</tr>';
+    }
+    document.getElementById('tabela-movimentacoes').innerHTML =
+      html || '<tr><td colspan="5" class="vazio">Nenhuma movimentação registrada.</td></tr>';
+  </script>
+</body>
+</html>
