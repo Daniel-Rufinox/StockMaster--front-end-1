@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockMaster — Alertas</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="conteudo">
+    <div class="pagina">
+      <h1>Alertas</h1>
+
+      <div class="cartao">
+        <h2>&#9888; Estoque Mínimo</h2>
+        <table><tbody id="tabela-minimo"></tbody></table>
+      </div>
+
+      <div class="cartao">
+        <h2>&#9888; Validade Próxima</h2>
+        <table><tbody id="tabela-validade"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    montarLayout();
+    var dados = DB.ler();
+
+    var htmlMinimo = '';
+    var htmlValidade = '';
+
+    for (var i = 0; i < dados.produtos.length; i++) {
+      var p = dados.produtos[i];
+
+      if (Number(p.quantidade) <= Number(p.minimo)) {
+        htmlMinimo += '<tr><td>' + p.nome + '</td>' +
+          '<td class="alerta-texto">Estoque: ' + p.quantidade + ' | Mínimo: ' + p.minimo + '</td></tr>';
+      }
+
+      var dias = diasAte(p.validade);
+      if (dias !== null && dias <= 30) {
+        var texto = dias < 0 ? 'Vencido há ' + Math.abs(dias) + ' dias' : 'Vence em ' + dias + ' dias';
+        htmlValidade += '<tr><td>' + p.nome + '</td><td class="alerta-texto">' + texto + '</td></tr>';
+      }
+    }
+
+    document.getElementById('tabela-minimo').innerHTML =
+      htmlMinimo || '<tr><td class="vazio">Nenhum produto abaixo do estoque mínimo.</td></tr>';
+    document.getElementById('tabela-validade').innerHTML =
+      htmlValidade || '<tr><td class="vazio">Nenhum produto com validade próxima.</td></tr>';
+  </script>
+</body>
+</html>
