@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockMaster — Cadastrar Produto</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="conteudo">
+    <div class="pagina">
+      <h1>Cadastrar Produto</h1>
+
+      <div id="mensagem"></div>
+
+      <div class="cartao">
+        <form id="form-produto">
+          <div class="linha">
+            <div class="campo">
+              <label for="nome">Nome do Produto</label>
+              <input type="text" id="nome" required>
+            </div>
+            <div class="campo">
+              <label for="categoria">Categoria</label>
+              <input type="text" id="categoria" required>
+            </div>
+          </div>
+
+          <div class="linha">
+            <div class="campo">
+              <label for="quantidade">Quantidade</label>
+              <input type="number" id="quantidade" min="0" value="0" required>
+            </div>
+            <div class="campo">
+              <label for="minimo">Estoque Mínimo</label>
+              <input type="number" id="minimo" min="0" value="5" required>
+            </div>
+            <div class="campo">
+              <label for="preco">Preço</label>
+              <input type="number" id="preco" min="0" step="0.01" required>
+            </div>
+          </div>
+
+          <div class="linha">
+            <div class="campo">
+              <label for="fornecedor">Fornecedor</label>
+              <input type="text" id="fornecedor">
+            </div>
+            <div class="campo">
+              <label for="validade">Data de Validade</label>
+              <input type="date" id="validade">
+            </div>
+          </div>
+
+          <div class="acoes">
+            <button type="submit" class="btn btn-primario">Salvar</button>
+            <a href="produtos.html" class="btn btn-secundario">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    montarLayout();
+
+    document.getElementById('form-produto').onsubmit = function (e) {
+      e.preventDefault();
+      var dados = DB.ler();
+      var id = DB.proximoId(dados.produtos);
+      var quantidade = Number(document.getElementById('quantidade').value);
+
+      dados.produtos.push({
+        id: id,
+        codigo: String(10000 + id).slice(1),
+        nome: document.getElementById('nome').value.trim(),
+        categoria: document.getElementById('categoria').value.trim(),
+        quantidade: quantidade,
+        minimo: Number(document.getElementById('minimo').value),
+        preco: Number(document.getElementById('preco').value),
+        fornecedor: document.getElementById('fornecedor').value.trim(),
+        validade: document.getElementById('validade').value
+      });
+
+      if (quantidade > 0) {
+        dados.movimentacoes.push({
+          id: DB.proximoId(dados.movimentacoes),
+          produtoId: id,
+          tipo: 'entrada',
+          quantidade: quantidade,
+          data: new Date().toISOString().slice(0, 10),
+          motivo: 'Cadastro inicial',
+          observacao: ''
+        });
+      }
+
+      DB.salvar(dados);
+      this.reset();
+      mensagem('Produto cadastrado com sucesso!', 'ok');
+    };
+  </script>
+</body>
+</html>
