@@ -1,0 +1,394 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+}
+
+button {
+    cursor: pointer;
+    border: 0;
+}
+
+/* =========================
+   ESTRUTURA
+========================= */
+
+#system {
+    display: none;
+}
+
+.sidebar {
+    width: 220px;
+    background: #10285b;
+    color: white;
+    padding: 20px 14px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.main {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    padding: 25px;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+    font-size: 22px;
+    font-weight: 700;
+    padding: 10px 12px 25px;
+}
+
+.logo small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    opacity: .7;
+    margin-top: 4px;
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+.nav button {
+    width: 100%;
+    background: transparent;
+    color: white;
+    text-align: left;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.nav button:hover,
+.nav button.active {
+    background: #245fd8;
+}
+
+
+/* =========================
+   TELAS
+========================= */
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+
+/* =========================
+   TOPO
+========================= */
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.top h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 2px 10px #dce2ee;
+}
+
+.card .num {
+    font-size: 26px;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+
+/* =========================
+   TEXTOS
+========================= */
+
+.muted {
+    color: #718096;
+    font-size: 13px;
+}
+
+
+/* =========================
+   PAINÉIS
+========================= */
+
+.panel {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 18px;
+    box-shadow: 0 2px 10px #dce2ee;
+}
+
+
+/* =========================
+   TABELAS
+========================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 13px;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 14px;
+}
+
+th {
+    color: #667085;
+    font-size: 12px;
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.btn {
+    background: #2463df;
+    color: white;
+    border-radius: 7px;
+    padding: 10px 15px;
+    font-weight: 600;
+}
+
+.btn.gray {
+    background: #eef2f8;
+    color: #25324a;
+}
+
+.btn.red {
+    background: #fff0f0;
+    color: #c53030;
+}
+
+.login-button {
+    width: 100%;
+}
+
+
+/* =========================
+   AÇÕES
+========================= */
+
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.badge {
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    background: #e9f8ef;
+    color: #177245;
+}
+
+.badge.warn {
+    background: #fff5d9;
+    color: #9a6500;
+}
+
+.badge.danger {
+    background: #ffe8e8;
+    color: #b42318;
+}
+
+
+/* =========================
+   FORMULÁRIOS
+========================= */
+
+.form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #d8dee9;
+    border-radius: 7px;
+    background: white;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+.login {
+    max-width: 420px;
+    margin: 60px auto;
+}
+
+.login .brand {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.login h1 {
+    font-size: 30px;
+}
+
+.login .panel {
+    padding: 30px;
+}
+
+.login .field {
+    margin-bottom: 15px;
+}
+
+
+/* =========================
+   ALERTAS
+========================= */
+
+.alert {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 9px;
+    margin: 10px 0;
+}
+
+
+/* =========================
+   BUSCA
+========================= */
+
+.search {
+    padding: 10px;
+    border: 1px solid #d8dee9;
+    border-radius: 7px;
+    width: 280px;
+}
+
+
+/* =========================
+   GRÁFICO
+========================= */
+
+.chart {
+    font-size: 22px;
+    letter-spacing: 3px;
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 800px) {
+
+    .sidebar {
+        width: 65px;
+        padding: 12px 8px;
+    }
+
+    .logo {
+        font-size: 0;
+    }
+
+    .logo:first-letter {
+        font-size: 22px;
+    }
+
+    .nav button {
+        font-size: 0;
+        text-align: center;
+    }
+
+    .nav button:before {
+        content: "•";
+        font-size: 22px;
+    }
+
+    .main {
+        margin-left: 65px;
+        width: calc(100% - 65px);
+        padding: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form {
+        grid-template-columns: 1fr;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    table {
+        min-width: 650px;
+    }
+
+    .panel {
+        overflow: auto;
+    }
+}
