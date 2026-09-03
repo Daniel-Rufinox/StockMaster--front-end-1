@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockMaster — Entrada de Estoque</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="conteudo">
+    <div class="pagina">
+      <h1>Entrada de Estoque</h1>
+
+      <div id="mensagem"></div>
+
+      <div class="cartao">
+        <form id="form-entrada">
+          <div class="linha">
+            <div class="campo">
+              <label for="produto">Produto</label>
+              <select id="produto" required></select>
+            </div>
+            <div class="campo">
+              <label for="fornecedor">Fornecedor</label>
+              <input type="text" id="fornecedor" placeholder="Selecione o fornecedor">
+            </div>
+          </div>
+
+          <div class="linha">
+            <div class="campo">
+              <label for="quantidade">Quantidade</label>
+              <input type="number" id="quantidade" min="1" required>
+            </div>
+            <div class="campo">
+              <label for="data">Data de Entrada</label>
+              <input type="date" id="data" required>
+            </div>
+            <div class="campo">
+              <label for="validade">Data de Validade</label>
+              <input type="date" id="validade">
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="observacao">Observação</label>
+            <textarea id="observacao"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primario">Registrar Entrada</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    montarLayout();
+
+    var selectProduto = document.getElementById('produto');
+    preencherSelectProdutos(selectProduto);
+    document.getElementById('data').value = new Date().toISOString().slice(0, 10);
+
+    document.getElementById('form-entrada').onsubmit = function (e) {
+      e.preventDefault();
+      var dados = DB.ler();
+      var produto = produtoPorId(dados, selectProduto.value);
+      if (!produto) { mensagem('Selecione um produto.', 'erro'); return; }
+
+      var quantidade = Number(document.getElementById('quantidade').value);
+      produto.quantidade = Number(produto.quantidade) + quantidade;
+
+      var fornecedor = document.getElementById('fornecedor').value.trim();
+      if (fornecedor) produto.fornecedor = fornecedor;
+
+      var validade = document.getElementById('validade').value;
+      if (validade) produto.validade = validade;
+
+      dados.movimentacoes.push({
+        id: DB.proximoId(dados.movimentacoes),
+        produtoId: produto.id,
+        tipo: 'entrada',
+        quantidade: quantidade,
+        data: document.getElementById('data').value,
+        motivo: 'Compra',
+        observacao: document.getElementById('observacao').value.trim()
+      });
+
+      DB.salvar(dados);
+      this.reset();
+      document.getElementById('data').value = new Date().toISOString().slice(0, 10);
+      preencherSelectProdutos(selectProduto);
+      mensagem('Entrada registrada com sucesso!', 'ok');
+    };
+  </script>
+</body>
+</html>
