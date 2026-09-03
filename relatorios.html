@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockMaster — Relatórios</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="conteudo">
+    <div class="pagina">
+      <h1>Relatórios</h1>
+
+      <div class="grade">
+        <div class="cartao">
+          <h2>Produtos Mais Vendidos</h2>
+          <div class="grafico" id="grafico-vendidos"></div>
+          <div class="grafico-legenda" id="legenda-vendidos"></div>
+        </div>
+
+        <div class="cartao">
+          <h2>Estoque Baixo</h2>
+          <div class="grafico" id="grafico-baixo"></div>
+          <div class="grafico-legenda" id="legenda-baixo"></div>
+        </div>
+      </div>
+
+      <div class="cartao">
+        <h2>Movimentações por Mês</h2>
+        <div class="grafico" id="grafico-meses"></div>
+        <div class="grafico-legenda" id="legenda-meses"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    montarLayout();
+    var dados = DB.ler();
+
+    function desenhar(idGrafico, idLegenda, itens, cor) {
+      var maior = 1;
+      for (var i = 0; i < itens.length; i++) if (itens[i].valor > maior) maior = itens[i].valor;
+
+      var barras = '', legendas = '';
+      for (var j = 0; j < itens.length; j++) {
+        var altura = Math.round((itens[j].valor / maior) * 90) + 5;
+        barras += '<div class="barra-item"><div class="barra ' + (cor || '') + '" style="height:' + altura + '%" title="' + itens[j].valor + '"></div></div>';
+        legendas += '<span>' + itens[j].rotulo + ' (' + itens[j].valor + ')</span>';
+      }
+      document.getElementById(idGrafico).innerHTML = barras || '<p class="vazio">Sem dados.</p>';
+      document.getElementById(idLegenda).innerHTML = legendas;
+    }
+
+    /* Produtos mais vendidos (somatório das saídas) */
+    var vendas = {};
+    for (var i = 0; i < dados.movimentacoes.length; i++) {
+      var m = dados.movimentacoes[i];
+      if (m.tipo !== 'saida') continue;
+      vendas[m.produtoId] = (vendas[m.produtoId] || 0) + Number(m.quantidade);
+    }
+    var listaVendas = [];
+    for (var idProduto in vendas) {
+      var p = produtoPorId(dados, idProduto);
+      if (p) listaVendas.push({ rotulo: p.nome, valor: vendas[idProduto] });
+    }
+    listaVendas.sort(function (a, b) { return b.valor - a.valor; });
+    desenhar('grafico-vendidos', 'legenda-vendidos', listaVendas.slice(0, 5), '');
+
+    /* Estoque baixo */
+    var baixos = [];
+    for (var k = 0; k < dados.produtos.length; k++) {
+      var pr = dados.produtos[k];
+      if (Number(pr.quantidade) <= Number(pr.minimo)) baixos.push({ rotulo: pr.nome, valor: Number(pr.quantidade) });
+    }
+    desenhar('grafico-baixo', 'legenda-baixo', baixos.slice(0, 5), 'vermelha');
+
+    /* Movimentações por mês */
+    var meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    var porMes = [];
+    for (var mi = 0; mi < 12; mi++) porMes.push({ rotulo: meses[mi], valor: 0 });
+    for (var n = 0; n < dados.movimentacoes.length; n++) {
+      var mov = dados.movimentacoes[n];
+      if (!mov.data) continue;
+      var indice = Number(mov.data.split('-')[1]) - 1;
+      porMes[indice].valor += Number(mov.quantidade);
+    }
+    desenhar('grafico-meses', 'legenda-meses', porMes, '');
+  </script>
+</body>
+</html>
