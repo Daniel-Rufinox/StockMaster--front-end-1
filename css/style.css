@@ -1,0 +1,309 @@
+/* ============================================================
+   StockMaster — Sistema de Controle de Estoque Comercial
+   Folha de estilos principal (CSS puro)
+   ============================================================ */
+
+:root {
+  --azul: #1565d8;
+  --azul-escuro: #0f4fb0;
+  --vermelho: #e05252;
+  --verde: #1f9d55;
+  --fundo: #f4f6fa;
+  --branco: #ffffff;
+  --texto: #2b3445;
+  --texto-fraco: #7b8494;
+  --borda: #e2e6ee;
+  --sombra: 0 1px 3px rgba(20, 40, 80, 0.08);
+  --raio: 8px;
+  --sidebar-largura: 260px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  font-size: 15px;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- Login ---------- */
+.login-tela {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-caixa {
+  background: var(--branco);
+  width: 100%;
+  max-width: 440px;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(20, 40, 80, 0.1);
+}
+
+.login-caixa h1 {
+  color: var(--azul);
+  text-align: center;
+  font-size: 34px;
+}
+
+.login-caixa .subtitulo,
+.login-caixa .rodape {
+  text-align: center;
+  color: var(--texto-fraco);
+  font-size: 14px;
+}
+
+.login-caixa .subtitulo { margin-top: 8px; margin-bottom: 32px; }
+.login-caixa .rodape { margin-top: 24px; }
+
+/* ---------- Formulários ---------- */
+.campo { margin-bottom: 18px; }
+
+.campo label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  font-size: 15px;
+  font-family: inherit;
+  background: var(--branco);
+  color: var(--texto);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--azul);
+}
+
+textarea { min-height: 90px; resize: vertical; }
+
+.linha {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.linha .campo { flex: 1 1 220px; }
+
+/* ---------- Botões ---------- */
+.btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  border-radius: var(--raio);
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-primario { background: var(--azul); color: #fff; }
+.btn-primario:hover { background: var(--azul-escuro); }
+
+.btn-secundario {
+  background: var(--branco);
+  color: var(--texto);
+  border-color: var(--borda);
+}
+.btn-secundario:hover { background: #f0f2f7; }
+
+.btn-perigo { background: var(--vermelho); color: #fff; }
+
+.btn-bloco { width: 100%; }
+.btn-pequeno { padding: 7px 14px; font-size: 13px; }
+
+/* ---------- Layout do sistema ---------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-largura);
+  height: 100vh;
+  background: var(--azul);
+  color: #fff;
+  padding: 32px 0;
+  overflow-y: auto;
+}
+
+.sidebar .marca {
+  font-size: 26px;
+  font-weight: bold;
+  padding: 0 34px 28px;
+}
+
+.sidebar nav a {
+  display: block;
+  padding: 13px 34px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 15px;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.ativo {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: bold;
+}
+
+.conteudo { margin-left: var(--sidebar-largura); min-height: 100vh; }
+
+.topbar {
+  background: var(--branco);
+  border-bottom: 1px solid var(--borda);
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 0 32px;
+  font-size: 14px;
+  color: var(--texto-fraco);
+}
+
+.pagina { padding: 32px; }
+
+.pagina > h1 {
+  font-size: 30px;
+  margin-bottom: 24px;
+}
+
+/* ---------- Cartões ---------- */
+.cartao {
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.cartao h2 { font-size: 18px; margin-bottom: 18px; }
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.indicador .rotulo { color: var(--texto-fraco); font-size: 15px; }
+.indicador .valor { font-size: 40px; font-weight: bold; margin-top: 10px; }
+
+.acoes { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* ---------- Tabelas ---------- */
+table { width: 100%; border-collapse: collapse; }
+
+th {
+  text-align: left;
+  color: var(--texto-fraco);
+  font-size: 13px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--borda);
+}
+
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--borda);
+  font-size: 15px;
+}
+
+tr:last-child td { border-bottom: none; }
+
+.vazio { color: var(--texto-fraco); padding: 20px 12px; }
+
+/* ---------- Etiquetas ---------- */
+.etiqueta {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.etiqueta-entrada { background: #e3f5ea; color: var(--verde); }
+.etiqueta-saida { background: #fbe6e6; color: var(--vermelho); }
+
+.alerta-texto { color: var(--vermelho); }
+
+/* ---------- Gráficos (CSS puro) ---------- */
+.grafico {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  height: 240px;
+  border-bottom: 1px solid #9aa3b2;
+  padding: 0 10px;
+}
+
+.grafico .barra-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+.grafico .barra {
+  width: 70%;
+  background: var(--azul);
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+}
+
+.grafico .barra.vermelha { background: var(--vermelho); }
+
+.grafico-legenda {
+  display: flex;
+  gap: 28px;
+  padding: 8px 10px 0;
+}
+
+.grafico-legenda span {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  color: var(--texto-fraco);
+}
+
+/* ---------- Mensagens ---------- */
+.mensagem {
+  padding: 12px 16px;
+  border-radius: var(--raio);
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+.mensagem-ok { background: #e3f5ea; color: var(--verde); }
+.mensagem-erro { background: #fbe6e6; color: var(--vermelho); }
+
+.busca { display: flex; gap: 12px; margin-bottom: 24px; }
+.busca input { max-width: 520px; }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 860px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 20px 0;
+  }
+  .sidebar .marca { padding: 0 20px 14px; }
+  .sidebar nav { display: flex; flex-wrap: wrap; }
+  .sidebar nav a { padding: 10px 16px; }
+  .conteudo { margin-left: 0; }
+  .pagina { padding: 20px; }
+}
