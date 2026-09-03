@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockMaster — Saída de Estoque</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="conteudo">
+    <div class="pagina">
+      <h1>Saída de Estoque</h1>
+
+      <div id="mensagem"></div>
+
+      <div class="cartao">
+        <form id="form-saida">
+          <div class="linha">
+            <div class="campo">
+              <label for="produto">Produto</label>
+              <select id="produto" required></select>
+            </div>
+            <div class="campo">
+              <label for="quantidade">Quantidade</label>
+              <input type="number" id="quantidade" min="1" required>
+            </div>
+          </div>
+
+          <div class="linha">
+            <div class="campo">
+              <label for="motivo">Motivo da Saída</label>
+              <select id="motivo">
+                <option>Venda</option>
+                <option>Perda</option>
+                <option>Descarte</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="data">Data</label>
+              <input type="date" id="data" required>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="observacao">Observação</label>
+            <textarea id="observacao"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primario">Registrar Saída</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    montarLayout();
+
+    var selectProduto = document.getElementById('produto');
+    preencherSelectProdutos(selectProduto);
+    document.getElementById('data').value = new Date().toISOString().slice(0, 10);
+
+    document.getElementById('form-saida').onsubmit = function (e) {
+      e.preventDefault();
+      var dados = DB.ler();
+      var produto = produtoPorId(dados, selectProduto.value);
+      if (!produto) { mensagem('Selecione um produto.', 'erro'); return; }
+
+      var quantidade = Number(document.getElementById('quantidade').value);
+      if (quantidade > Number(produto.quantidade)) {
+        mensagem('Estoque insuficiente. Disponível: ' + produto.quantidade + ' unidades.', 'erro');
+        return;
+      }
+
+      produto.quantidade = Number(produto.quantidade) - quantidade;
+
+      dados.movimentacoes.push({
+        id: DB.proximoId(dados.movimentacoes),
+        produtoId: produto.id,
+        tipo: 'saida',
+        quantidade: quantidade,
+        data: document.getElementById('data').value,
+        motivo: document.getElementById('motivo').value,
+        observacao: document.getElementById('observacao').value.trim()
+      });
+
+      DB.salvar(dados);
+      this.reset();
+      document.getElementById('data').value = new Date().toISOString().slice(0, 10);
+      preencherSelectProdutos(selectProduto);
+      mensagem('Saída registrada com sucesso!', 'ok');
+    };
+  </script>
+</body>
+</html>
