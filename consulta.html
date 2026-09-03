@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockMaster — Consulta de Produtos</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="conteudo">
+    <div class="pagina">
+      <h1>Consulta de Produtos</h1>
+
+      <form class="busca" id="form-busca">
+        <input type="text" id="campo-busca" placeholder="Buscar por nome ou código...">
+        <button type="submit" class="btn btn-primario">Buscar</button>
+      </form>
+
+      <div class="cartao">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>Estoque</th>
+              <th>Preço</th>
+              <th>Fornecedor</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-consulta"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    montarLayout();
+
+    function buscar(termo) {
+      var dados = DB.ler();
+      termo = (termo || '').toLowerCase();
+      var html = '';
+      for (var i = 0; i < dados.produtos.length; i++) {
+        var p = dados.produtos[i];
+        if (termo && p.nome.toLowerCase().indexOf(termo) === -1 && p.codigo.indexOf(termo) === -1) continue;
+        html += '<tr>' +
+          '<td>' + p.codigo + '</td>' +
+          '<td>' + p.nome + '</td>' +
+          '<td>' + p.categoria + '</td>' +
+          '<td>' + p.quantidade + '</td>' +
+          '<td>' + moeda(p.preco) + '</td>' +
+          '<td>' + (p.fornecedor || '-') + '</td>' +
+          '</tr>';
+      }
+      document.getElementById('tabela-consulta').innerHTML =
+        html || '<tr><td colspan="6" class="vazio">Nenhum produto encontrado.</td></tr>';
+    }
+
+    document.getElementById('form-busca').onsubmit = function (e) {
+      e.preventDefault();
+      buscar(document.getElementById('campo-busca').value);
+    };
+
+    buscar('');
+  </script>
+</body>
+</html>
